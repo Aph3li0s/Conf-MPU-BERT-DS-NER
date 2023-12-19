@@ -10,9 +10,7 @@ import metric
 import bert_ds_ner as bds
 import os
 import numpy as np
-output_model_file = "out_base/Conf-MPU/CoNLL2003_Dict_1.0/CoNLL2003_Dict_1.0/pytorch_model.bin"
-output_config_file = "out_base/Conf-MPU/CoNLL2003_Dict_1.0/CoNLL2003_Dict_1.0/config.json"
-output_vocab_file = "out_base/Conf-MPU/CoNLL2003_Dict_1.0/CoNLL2003_Dict_1.0/vocab.txt"
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 label_list = ["O", "PER", "LOC", "ORG", "MISC", "[CLS]", "[SEP]"]
 
@@ -98,12 +96,22 @@ def eval(model):
     metric._eval(newSentences, label_map, args, '')
             
 if __name__ == '__main__':
+    # output_model_file = "out_base/Conf-MPU/CoNLL2003_Dict_1.0/CoNLL2003_Dict_1.0/pytorch_model.bin"
+    # output_config_file = "out_base/Conf-MPU/CoNLL2003_Dict_1.0/CoNLL2003_Dict_1.0/config.json"
+    # output_vocab_file = "out_base/Conf-MPU/CoNLL2003_Dict_1.0/CoNLL2003_Dict_1.0/vocab.txt"
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('--flag', type=str, default="ALL", help='train.flag.txt')
     parser.add_argument('--determine_entity', type=bool, default=False, help='determine entity or not')
     parser.add_argument('--inference', type=bool, default=False, help='do inference or not')
+    parser.add_argument('--model', type=str, help='.bin weight file')
+    parser.add_argument('--config', type=str, help='config.json')
+    parser.add_argument('--vocab', type=str, help='vocab.txt')
     args = parser.parse_args()
     
+    output_model_file = args.model
+    output_config_file = args.config
+    output_vocab_file = args.vocab
     num_labels = len(label_list) + 1
     args.num_class = num_labels
     
